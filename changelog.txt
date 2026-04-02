@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2026-04-02
+  Changes:
+    - New custom artwork for all 6 mine types (128x128 HR sprites)
+    - New mine variants: Cryo, Tritium, Antimatter now have unique visuals matching their type
+    - All mine icons updated to 128x128 for sharper display in research tree and inventory
+---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2026-03-29
   Features:

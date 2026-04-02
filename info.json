@@ -1,6 +1,6 @@
 {
   "name": "jumping-mines",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "title": "Jumping Mines",
   "author": "Askalona",
   "description": "Deployable mines that detect enemies and launch an explosive projectile.",

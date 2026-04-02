@@ -14,39 +14,36 @@ local MINE_CONFIG = {
   ["jumping-mine"] = {
     projectile    = "jumping-mine-projectile",
     range_bonus   = 0,
-    base_cooldown = 300,   -- 5 s
+    base_cooldown = 300,    -- 5 s
   },
   ["jumping-flame-mine"] = {
     projectile    = "jumping-flame-projectile",
     range_bonus   = 0,
-    base_cooldown = 600,   -- 10 s
+    base_cooldown = 600,    -- 10 s
   },
   ["jumping-nuclear-mine"] = {
     projectile    = "jumping-nuclear-projectile",
     range_bonus   = 10,
-    base_cooldown = 900,   -- 15 s
+    base_cooldown = 900,    -- 15 s
+  },
+  ["jumping-cryo-mine"] = {
+    projectile    = "jumping-cryo-projectile",
+    range_bonus   = 0,
+    base_cooldown = 600,    -- 10 s
+  },
+  ["jumping-tritium-mine"] = {
+    projectile    = "jumping-tritium-projectile",
+    range_bonus   = 15,
+    base_cooldown = 1200,   -- 20 s
+  },
+  ["jumping-antimatter-mine"] = {
+    projectile    = "jumping-antimatter-projectile",
+    range_bonus   = 20,
+    base_cooldown = 1800,   -- 30 s
   },
 }
 
-local function register_se_mines()
-  if script.active_mods["space-exploration"] then
-    MINE_CONFIG["jumping-cryo-mine"] = {
-      projectile    = "jumping-cryo-projectile",
-      range_bonus   = 0,
-      base_cooldown = 600,    -- 10 s
-    }
-    MINE_CONFIG["jumping-tritium-mine"] = {
-      projectile    = "jumping-tritium-projectile",
-      range_bonus   = 15,
-      base_cooldown = 1200,   -- 20 s
-    }
-    MINE_CONFIG["jumping-antimatter-mine"] = {
-      projectile    = "jumping-antimatter-projectile",
-      range_bonus   = 20,
-      base_cooldown = 1800,   -- 30 s
-    }
-  end
-end
+local function register_se_mines() end  -- SE mines now built-in
 
 -- ─── Constants ───────────────────────────────────────────────
 local RANGE_BASE       = 5
