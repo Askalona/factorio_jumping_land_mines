@@ -35,8 +35,8 @@ jobs:
 
           # Initiate upload
           RESPONSE=$(curl -s -X POST "https://mods.factorio.com/api/v2/mods/releases/init_upload" \
-            -F "mod=$MOD" \
-            -F "token=$TOKEN")
+            -H "Authorization: Bearer $TOKEN" \
+            -F "mod=$MOD")
 
           UPLOAD_URL=$(echo "$RESPONSE" | jq -r '.upload_url')
 
