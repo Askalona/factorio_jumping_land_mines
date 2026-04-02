@@ -1,0 +1,53 @@
+name: Release to Factorio Mod Portal
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get version from info.json
+        id: info
+        run: |
+          VERSION=$(jq -r '.version' info.json)
+          NAME=$(jq -r '.name' info.json)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "name=$NAME" >> $GITHUB_OUTPUT
+          echo "zip=${NAME}_${VERSION}.zip" >> $GITHUB_OUTPUT
+
+      - name: Build zip
+        run: |
+          MOD_DIR="${{ steps.info.outputs.name }}_${{ steps.info.outputs.version }}"
+          mkdir -p build/$MOD_DIR
+          cp -r changelog.txt control.lua data.lua data-final-fixes.lua info.json thumbnail.png graphics locale build/$MOD_DIR/
+          cd build
+          zip -r "../${{ steps.info.outputs.zip }}" "$MOD_DIR"
+
+      - name: Upload to Factorio Mod Portal
+        run: |
+          ZIP="${{ steps.info.outputs.zip }}"
+          MOD="${{ steps.info.outputs.name }}"
+          TOKEN="${{ secrets.FACTORIO_MOD_TOKEN }}"
+
+          # Initiate upload
+          RESPONSE=$(curl -s -X POST "https://mods.factorio.com/api/v2/mods/releases/init_upload" \
+            -F "mod=$MOD" \
+            -F "token=$TOKEN")
+
+          UPLOAD_URL=$(echo "$RESPONSE" | jq -r '.upload_url')
+
+          if [ -z "$UPLOAD_URL" ] || [ "$UPLOAD_URL" = "null" ]; then
+            echo "Failed to get upload URL: $RESPONSE"
+            exit 1
+          fi
+
+          # Upload zip
+          curl -s -X POST "$UPLOAD_URL" \
+            -F "file=@$ZIP" \
+            -o upload_result.json
+
+          cat upload_result.json
