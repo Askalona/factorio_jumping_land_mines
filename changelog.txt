@@ -1,0 +1,44 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2026-03-29
+  Features:
+    - Added 5 new mine types: Flame, Nuclear, Cryo (SE), Tritium (SE/K2), Antimatter (SE)
+    - Added Persistent Mode: mines survive firing and reload instead of self-destructing
+    - Added per-mine-type reload cooldowns: Basic 5s, Flame/Cryo 10s, Nuclear 15s, Tritium 20s, Antimatter 30s
+    - Added Reload Speed upgrade (9 levels, -5% per level, min 10% of base cooldown)
+    - Added shortcut button to toggle Persistent Mode per-force
+    - Added Informatron integration: overview, Mine Types, and Upgrades pages
+    - Added custom recolored icons for all 6 mine types
+    - Added stun effect to basic mine explosion
+    - Added radiation damage (50/50 explosion + radiation split) to Nuclear, Tritium, and Antimatter mines
+    - Added radiation resistance to all mine types
+    - Added nuclear-tier explosion visuals for Nuclear, Tritium, and Antimatter mines
+    - Flame mine benefits from Flamethrower damage research upgrades
+    - All mines are immune to fire, explosion, cold, and radiation damage (no friendly fire)
+    - Cryo mine ice walls no longer drop items when destroyed
+    - Overhauled recipes for all mine types
+    - Optional dependencies: Krastorio2, Space Exploration, landmine-thrower, Informatron
+  Bugfixes:
+    - Fixed mines placed before a mod update losing their registration and no longer attacking enemies
+    - Fixed Tritium mine tech prerequisite (now correctly requires thermonuclear energy research)
+    - Fixed Antimatter explosion destroying nearby friendly mines (replaced acid damage with explosion)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2026-03-12
+  Bugfixes:
+    - Fixed damage not being attributed to the landmine ammo category (research bonuses now apply correctly)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2026-03-12
+  Features:
+    - Initial release
+    - Mines auto-detect enemies and launch an explosive projectile at the nearest target
+    - Base detection range: 5 tiles, upgradeable up to 25 tiles (10 research levels)
+    - Base arming time: 1.0 sec, reducible to 0.1 sec (9 research levels)
+    - Two visual states: unearthed (arming) and buried (armed)
+    - Ghost entity created on death for automatic robot re-placement
+    - Compatible with landmine-thrower mod (flare integration)
+    - Stun effect on explosion area
+    - Optimized batch processing for large mine counts (100 mines/tick)
+    - Localization: en, de, fr, ru, zh-CN, pl, cs, pt-BR, ja, ko, es, it, nl, hu, uk
+---------------------------------------------------------------------------------------------------

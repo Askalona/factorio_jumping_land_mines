@@ -1,0 +1,15 @@
+{
+  "name": "jumping-mines",
+  "version": "1.0.2",
+  "title": "Jumping Mines",
+  "author": "Askalona",
+  "description": "Deployable mines that detect enemies and launch an explosive projectile.",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0.0",
+    "? space-exploration",
+    "? Krastorio2",
+    "? landmine-thrower",
+    "? informatron"
+  ]
+}
