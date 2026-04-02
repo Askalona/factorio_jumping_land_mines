@@ -20,25 +20,25 @@ local mine_resistances = {
   {type = radiation_type, percent = 100},
 }
 
--- ─── Shared visual pieces for the base jumping-mine sprite ───
-local function mine_picture_safe(scale)
-  scale = scale or 0.5
+-- ─── Visual pieces for mine sprites (128×128 HR art) ──────────
+local function mine_picture_safe(scale, filename)
+  scale = scale or 0.25
   return {
-    filename = "__base__/graphics/entity/land-mine/land-mine.png",
+    filename = filename or "__base__/graphics/entity/land-mine/land-mine.png",
     priority = "medium",
-    width    = 64,
-    height   = 64,
+    width    = 128,
+    height   = 128,
     scale    = scale,
   }
 end
 
-local function mine_picture_set(scale)
-  scale = scale or 0.5
+local function mine_picture_set(scale, filename)
+  scale = scale or 0.25
   return {
-    filename = "__base__/graphics/entity/land-mine/land-mine-set.png",
+    filename = filename or "__base__/graphics/entity/land-mine/land-mine-set.png",
     priority = "medium",
-    width    = 64,
-    height   = 64,
+    width    = 128,
+    height   = 128,
     scale    = scale,
   }
 end
@@ -55,7 +55,7 @@ data:extend({
   type             = "land-mine",
   name             = "jumping-mine",
   icon             = "__jumping-mines__/graphics/icons/jumping-mine.png",
-  icon_size        = 64,
+  icon_size        = 128,
   flags            = {"placeable-player", "player-creation", "not-repairable"},
   minable          = {mining_time = 0.5, result = "jumping-mine"},
   max_health       = 50,
@@ -64,8 +64,8 @@ data:extend({
   selection_box    = {{-0.5, -0.5}, {0.5, 0.5}},
   is_military_target = true,
   resistances      = mine_resistances,
-  picture_safe     = mine_picture_safe(0.5),
-  picture_set      = mine_picture_set(0.5),
+  picture_safe     = mine_picture_safe(0.25, "__jumping-mines__/graphics/entity/jumping-mine/jumping-mine-safe.png"),
+  picture_set      = mine_picture_set(0.25, "__jumping-mines__/graphics/entity/jumping-mine/jumping-mine-set.png"),
   timeout          = 60,
   trigger_radius   = 0,
   ammo_category    = "landmine",
@@ -97,7 +97,7 @@ data:extend({
   type             = "land-mine",
   name             = "jumping-flame-mine",
   icon             = "__jumping-mines__/graphics/icons/jumping-flame-mine.png",
-  icon_size        = 64,
+  icon_size        = 128,
   flags            = {"placeable-player", "player-creation", "not-repairable"},
   minable          = {mining_time = 0.5, result = "jumping-flame-mine"},
   max_health       = 50,
@@ -106,8 +106,8 @@ data:extend({
   selection_box    = {{-0.5, -0.5}, {0.5, 0.5}},
   is_military_target = true,
   resistances      = mine_resistances,
-  picture_safe     = mine_picture_safe(0.5),
-  picture_set      = mine_picture_set(0.5),
+  picture_safe     = mine_picture_safe(0.25, "__jumping-mines__/graphics/entity/jumping-flame-mine/jumping-flame-mine-safe.png"),
+  picture_set      = mine_picture_set(0.25, "__jumping-mines__/graphics/entity/jumping-flame-mine/jumping-flame-mine-set.png"),
   timeout          = 60,
   trigger_radius   = 0,
   ammo_category    = "flamethrower",
@@ -140,7 +140,7 @@ data:extend({
   type             = "land-mine",
   name             = "jumping-nuclear-mine",
   icon             = "__jumping-mines__/graphics/icons/jumping-nuclear-mine.png",
-  icon_size        = 64,
+  icon_size        = 128,
   flags            = {"placeable-player", "player-creation", "not-repairable"},
   minable          = {mining_time = 0.5, result = "jumping-nuclear-mine"},
   max_health       = 50,
@@ -149,8 +149,8 @@ data:extend({
   selection_box    = {{-0.5, -0.5}, {0.5, 0.5}},
   is_military_target = true,
   resistances      = mine_resistances,
-  picture_safe     = mine_picture_safe(0.6),
-  picture_set      = mine_picture_set(0.6),
+  picture_safe     = mine_picture_safe(0.3, "__jumping-mines__/graphics/entity/jumping-nuclear-mine/jumping-nuclear-mine-safe.png"),
+  picture_set      = mine_picture_set(0.3, "__jumping-mines__/graphics/entity/jumping-nuclear-mine/jumping-nuclear-mine-set.png"),
   timeout          = 60,
   trigger_radius   = 0,
   ammo_category    = "landmine",
@@ -177,6 +177,8 @@ data:extend({
   },
 },
 
+-- (cryo / tritium / antimatter mines defined in data-final-fixes.lua)
+
 -- ─────────────────────────────────────────────────────────────
 --  STICKERS
 -- ─────────────────────────────────────────────────────────────
@@ -193,6 +195,7 @@ data:extend({
   damage_interval           = 30,
   damage_per_interval       = {amount = 15, type = "fire"},
 },
+
 
 -- ─────────────────────────────────────────────────────────────
 --  PROJECTILES
@@ -423,6 +426,7 @@ data:extend({
   },
 },
 
+
 -- ─────────────────────────────────────────────────────────────
 --  ITEMS
 -- ─────────────────────────────────────────────────────────────
@@ -431,7 +435,7 @@ data:extend({
   type         = "item",
   name         = "jumping-mine",
   icon         = "__jumping-mines__/graphics/icons/jumping-mine.png",
-  icon_size    = 64,
+  icon_size    = 128,
   subgroup     = "defensive-structure",
   order        = "b[land-mine]-b[jumping-mine]",
   place_result = "jumping-mine",
@@ -441,7 +445,7 @@ data:extend({
   type         = "item",
   name         = "jumping-flame-mine",
   icon         = "__jumping-mines__/graphics/icons/jumping-flame-mine.png",
-  icon_size    = 64,
+  icon_size    = 128,
   subgroup     = "defensive-structure",
   order        = "b[land-mine]-c[jumping-flame-mine]",
   place_result = "jumping-flame-mine",
@@ -451,12 +455,13 @@ data:extend({
   type         = "item",
   name         = "jumping-nuclear-mine",
   icon         = "__jumping-mines__/graphics/icons/jumping-nuclear-mine.png",
-  icon_size    = 64,
+  icon_size    = 128,
   subgroup     = "defensive-structure",
   order        = "b[land-mine]-d[jumping-nuclear-mine]",
   place_result = "jumping-nuclear-mine",
   stack_size   = 100,
 },
+
 
 -- ─────────────────────────────────────────────────────────────
 --  RECIPES
@@ -522,6 +527,7 @@ data:extend({
   },
 },
 
+
 -- ─────────────────────────────────────────────────────────────
 --  BASE TECHNOLOGY
 -- ─────────────────────────────────────────────────────────────
@@ -530,7 +536,7 @@ data:extend({
   type = "technology",
   name = "jumping-mines",
   icon = "__jumping-mines__/graphics/icons/jumping-mine.png",
-  icon_size = 64,
+  icon_size = 128,
   prerequisites = {"land-mine", "military-2"},
   unit = {
     count = 150,
@@ -555,7 +561,7 @@ data:extend({
   type = "technology",
   name = "jumping-flame-mines",
   icon = "__jumping-mines__/graphics/icons/jumping-flame-mine.png",
-  icon_size = 64,
+  icon_size = 128,
   prerequisites = {"jumping-mines", "flammables"},
   unit = {
     count = 200,
@@ -575,7 +581,7 @@ data:extend({
   type = "technology",
   name = "jumping-nuclear-mines",
   icon = "__jumping-mines__/graphics/icons/jumping-nuclear-mine.png",
-  icon_size = 64,
+  icon_size = 128,
   prerequisites = {"jumping-mines", "atomic-bomb"},
   unit = {
     count = 500,
@@ -591,6 +597,7 @@ data:extend({
     {type = "unlock-recipe", recipe = "jumping-nuclear-mine"},
   },
 },
+
 
 -- ─────────────────────────────────────────────────────────────
 --  PERSISTENT MINE TECHNOLOGY

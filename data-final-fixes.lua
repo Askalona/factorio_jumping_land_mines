@@ -23,23 +23,23 @@ if data.raw["simple-entity"]["se-cryogun-ice"] then
   end
 
   -- ── Shared helpers ─────────────────────────────────────────
-  local function mine_picture_safe(scale)
+  local function mine_picture_safe(name, scale)
     return {
-      filename = "__base__/graphics/entity/land-mine/land-mine.png",
+      filename = "__jumping-mines__/graphics/entity/" .. name .. "/" .. name .. "-safe.png",
       priority = "medium",
-      width    = 64,
-      height   = 64,
-      scale    = scale or 0.5,
+      width    = 128,
+      height   = 128,
+      scale    = scale or 0.25,
     }
   end
 
-  local function mine_picture_set(scale)
+  local function mine_picture_set(name, scale)
     return {
-      filename = "__base__/graphics/entity/land-mine/land-mine-set.png",
+      filename = "__jumping-mines__/graphics/entity/" .. name .. "/" .. name .. "-set.png",
       priority = "medium",
-      width    = 64,
-      height   = 64,
-      scale    = scale or 0.5,
+      width    = 128,
+      height   = 128,
+      scale    = scale or 0.25,
     }
   end
 
@@ -70,7 +70,7 @@ if data.raw["simple-entity"]["se-cryogun-ice"] then
       type             = "land-mine",
       name             = "jumping-cryo-mine",
       icon             = "__jumping-mines__/graphics/icons/jumping-cryo-mine.png",
-      icon_size        = 64,
+      icon_size        = 128,
       flags            = {"placeable-player", "player-creation", "not-repairable"},
       minable          = {mining_time = 0.5, result = "jumping-cryo-mine"},
       max_health       = 50,
@@ -79,8 +79,8 @@ if data.raw["simple-entity"]["se-cryogun-ice"] then
       selection_box    = {{-0.5, -0.5}, {0.5, 0.5}},
       is_military_target = true,
       resistances      = mine_resistances,
-      picture_safe     = mine_picture_safe(0.5),
-      picture_set      = mine_picture_set(0.5),
+      picture_safe     = mine_picture_safe("jumping-cryo-mine"),
+      picture_set      = mine_picture_set("jumping-cryo-mine"),
       timeout          = 60,
       trigger_radius   = 0,
       ammo_category    = "landmine",
@@ -113,7 +113,7 @@ if data.raw["simple-entity"]["se-cryogun-ice"] then
       type             = "land-mine",
       name             = "jumping-tritium-mine",
       icon             = "__jumping-mines__/graphics/icons/jumping-tritium-mine.png",
-      icon_size        = 64,
+      icon_size        = 128,
       flags            = {"placeable-player", "player-creation", "not-repairable"},
       minable          = {mining_time = 0.5, result = "jumping-tritium-mine"},
       max_health       = 50,
@@ -122,8 +122,8 @@ if data.raw["simple-entity"]["se-cryogun-ice"] then
       selection_box    = {{-0.5, -0.5}, {0.5, 0.5}},
       is_military_target = true,
       resistances      = mine_resistances,
-      picture_safe     = mine_picture_safe(0.55),
-      picture_set      = mine_picture_set(0.55),
+      picture_safe     = mine_picture_safe("jumping-tritium-mine", 0.3),
+      picture_set      = mine_picture_set("jumping-tritium-mine", 0.3),
       timeout          = 60,
       trigger_radius   = 0,
       ammo_category    = "landmine",
@@ -161,7 +161,7 @@ if data.raw["simple-entity"]["se-cryogun-ice"] then
       type             = "land-mine",
       name             = "jumping-antimatter-mine",
       icon             = "__jumping-mines__/graphics/icons/jumping-antimatter-mine.png",
-      icon_size        = 64,
+      icon_size        = 128,
       flags            = {"placeable-player", "player-creation", "not-repairable"},
       minable          = {mining_time = 0.5, result = "jumping-antimatter-mine"},
       max_health       = 50,
@@ -170,8 +170,8 @@ if data.raw["simple-entity"]["se-cryogun-ice"] then
       selection_box    = {{-0.5, -0.5}, {0.5, 0.5}},
       is_military_target = true,
       resistances      = mine_resistances,
-      picture_safe     = mine_picture_safe(0.6),
-      picture_set      = mine_picture_set(0.6),
+      picture_safe     = mine_picture_safe("jumping-antimatter-mine", 0.3),
+      picture_set      = mine_picture_set("jumping-antimatter-mine", 0.3),
       timeout          = 60,
       trigger_radius   = 0,
       ammo_category    = "landmine",
@@ -488,7 +488,7 @@ if data.raw["simple-entity"]["se-cryogun-ice"] then
       type         = "item",
       name         = "jumping-cryo-mine",
       icon         = "__jumping-mines__/graphics/icons/jumping-cryo-mine.png",
-      icon_size    = 64,
+      icon_size    = 128,
       subgroup     = "defensive-structure",
       order        = "b[land-mine]-e[jumping-cryo-mine]",
       place_result = "jumping-cryo-mine",
@@ -498,7 +498,7 @@ if data.raw["simple-entity"]["se-cryogun-ice"] then
       type         = "item",
       name         = "jumping-tritium-mine",
       icon         = "__jumping-mines__/graphics/icons/jumping-tritium-mine.png",
-      icon_size    = 64,
+      icon_size    = 128,
       subgroup     = "defensive-structure",
       order        = "b[land-mine]-f[jumping-tritium-mine]",
       place_result = "jumping-tritium-mine",
@@ -508,7 +508,7 @@ if data.raw["simple-entity"]["se-cryogun-ice"] then
       type         = "item",
       name         = "jumping-antimatter-mine",
       icon         = "__jumping-mines__/graphics/icons/jumping-antimatter-mine.png",
-      icon_size    = 64,
+      icon_size    = 128,
       subgroup     = "defensive-structure",
       order        = "b[land-mine]-g[jumping-antimatter-mine]",
       place_result = "jumping-antimatter-mine",
@@ -581,7 +581,7 @@ if data.raw["simple-entity"]["se-cryogun-ice"] then
     type = "technology",
     name = "jumping-cryo-mines",
     icon = "__jumping-mines__/graphics/icons/jumping-cryo-mine.png",
-    icon_size = 64,
+    icon_size = 128,
     prerequisites = cryo_prereqs,
     unit = {
       count = 400,
@@ -611,7 +611,7 @@ if data.raw["simple-entity"]["se-cryogun-ice"] then
     type = "technology",
     name = "jumping-tritium-mines",
     icon = "__jumping-mines__/graphics/icons/jumping-tritium-mine.png",
-    icon_size = 64,
+    icon_size = 128,
     prerequisites = tritium_prereqs,
     unit = {
       count = 800,
@@ -638,7 +638,7 @@ if data.raw["simple-entity"]["se-cryogun-ice"] then
     type = "technology",
     name = "jumping-antimatter-mines",
     icon = "__jumping-mines__/graphics/icons/jumping-antimatter-mine.png",
-    icon_size = 64,
+    icon_size = 128,
     prerequisites = antimatter_prereqs,
     unit = {
       count = 1500,
@@ -759,9 +759,7 @@ convert_mine_to_thrower_ammo("jumping-mine", "jumping-mine")
 convert_mine_to_thrower_ammo("jumping-flame-mine",   "jumping-flame-mine")
 convert_mine_to_thrower_ammo("jumping-nuclear-mine", "jumping-nuclear-mine")
 
--- SE mine variants (only present when SE is loaded)
-if data.raw["simple-entity"]["se-cryogun-ice"] then
-  convert_mine_to_thrower_ammo("jumping-cryo-mine",      "jumping-cryo-mine")
-  convert_mine_to_thrower_ammo("jumping-tritium-mine",    "jumping-tritium-mine")
-  convert_mine_to_thrower_ammo("jumping-antimatter-mine", "jumping-antimatter-mine")
-end
+-- SE mine variants (converted if present)
+convert_mine_to_thrower_ammo("jumping-cryo-mine",      "jumping-cryo-mine")
+convert_mine_to_thrower_ammo("jumping-tritium-mine",    "jumping-tritium-mine")
+convert_mine_to_thrower_ammo("jumping-antimatter-mine", "jumping-antimatter-mine")
