@@ -46,7 +46,7 @@ local MINE_CONFIG = {
 local function register_se_mines() end  -- SE mines now built-in
 
 -- ─── Constants ───────────────────────────────────────────────
-local RANGE_BASE       = 5
+local RANGE_BASE       = settings.startup["jm-base-range"].value
 local RANGE_PER_LVL    = 2
 local RANGE_MAX_LVL    = 10
 local ARM_BASE         = 60
@@ -55,7 +55,7 @@ local ARM_MAX_LVL      = 9
 local COOLDOWN_BASE    = 300
 local COOLDOWN_STEP    = 30
 local COOLDOWN_MAX_LVL = 9
-local BATCH_SIZE       = 100  -- mines processed per tick
+-- BATCH_SIZE is now a runtime-global setting: settings.global["jm-batch-size"].value
 
 -- ─── Force-data cache ────────────────────────────────────────
 
@@ -78,6 +78,7 @@ local function compute_arm_ticks(force)
 end
 
 local function compute_persistent(force)
+  if not settings.startup["jm-enable-persistent"].value then return false end
   local tech = force.technologies["jumping-mines-persistent"]
   return tech and tech.researched or false
 end
@@ -214,8 +215,10 @@ script.on_event(defines.events.on_research_finished, function(event)
   if event.research.name == "jumping-mines-persistent" then
     local force = event.research.force
     storage.force_persistent[force.name] = true
-    for _, p in pairs(force.players) do
-      p.set_shortcut_toggled("jumping-mines-persistent-toggle", true)
+    if settings.startup["jm-enable-persistent"].value then
+      for _, p in pairs(force.players) do
+        p.set_shortcut_toggled("jumping-mines-persistent-toggle", true)
+      end
     end
   end
 end)
@@ -227,7 +230,6 @@ script.on_event(defines.events.on_lua_shortcut, function(event)
   local fname  = player.force.name
   local new_state = not (storage.force_persistent[fname] or false)
   storage.force_persistent[fname] = new_state
-  -- Sync visual toggle state for all players in this force.
   for _, p in pairs(player.force.players) do
     p.set_shortcut_toggled("jumping-mines-persistent-toggle", new_state)
   end
@@ -235,6 +237,7 @@ end)
 
 -- Sync shortcut visual state when a player joins (e.g. multiplayer).
 script.on_event(defines.events.on_player_joined_game, function(event)
+  if not settings.startup["jm-enable-persistent"].value then return end
   local player = game.players[event.player_index]
   local state  = storage.force_persistent[player.force.name] or false
   player.set_shortcut_toggled("jumping-mines-persistent-toggle", state)
@@ -312,8 +315,9 @@ script.on_event(defines.events.on_tick, function(event)
   local tick   = event.tick
   local cursor = storage.mine_cursor
   local done   = 0
+  local batch  = settings.global["jm-batch-size"].value
 
-  while done < BATCH_SIZE and #ids > 0 do
+  while done < batch and #ids > 0 do
     if cursor > #ids then cursor = 1 end
 
     done = done + 1
@@ -417,32 +421,46 @@ if script.active_mods["informatron"] then
   end
 
   local function page_content(data)
-    local el        = data.element
-    local page_name = data.page_name
-    local has_se    = script.active_mods["space-exploration"]
+    local el          = data.element
+    local page_name   = data.page_name
+    local has_se      = script.active_mods["space-exploration"]
+    local has_persist = settings.startup["jm-enable-persistent"].value
 
     if page_name == "jumping-mines" then
       el.add{type = "label", caption = {"jumping-mines-info.overview_text"}}.style.single_line = false
 
     elseif page_name == "jm-mines" then
-      el.add{type = "label", caption = {"jumping-mines-info.mines_header"}}.style.single_line = false
+      local header = has_persist and "jumping-mines-info.mines_header"
+                                  or "jumping-mines-info.mines_header_no_persistent"
+      el.add{type = "label", caption = {header}}.style.single_line = false
       el.add{type = "line",  direction = "horizontal"}
-      add_mine_row(el, "item/jumping-mine",         {"jumping-mines-info.mine_basic"})
-      add_mine_row(el, "item/jumping-flame-mine",   {"jumping-mines-info.mine_flame"})
-      add_mine_row(el, "item/jumping-nuclear-mine", {"jumping-mines-info.mine_nuclear"})
+      local s = has_persist and "" or "_no_persistent"
+      add_mine_row(el, "item/jumping-mine",         {"jumping-mines-info.mine_basic"          .. s})
+      add_mine_row(el, "item/jumping-flame-mine",   {"jumping-mines-info.mine_flame"          .. s})
+      add_mine_row(el, "item/jumping-nuclear-mine", {"jumping-mines-info.mine_nuclear"        .. s})
       if has_se then
-        add_mine_row(el, "item/jumping-cryo-mine",       {"jumping-mines-info.mine_cryo"})
-        add_mine_row(el, "item/jumping-tritium-mine",    {"jumping-mines-info.mine_tritium"})
-        add_mine_row(el, "item/jumping-antimatter-mine", {"jumping-mines-info.mine_antimatter"})
+        add_mine_row(el, "item/jumping-cryo-mine",       {"jumping-mines-info.mine_cryo"      .. s})
+        add_mine_row(el, "item/jumping-tritium-mine",    {"jumping-mines-info.mine_tritium"   .. s})
+        add_mine_row(el, "item/jumping-antimatter-mine", {"jumping-mines-info.mine_antimatter".. s})
       end
 
     elseif page_name == "jm-upgrades" then
       el.add{type = "label", caption = {"jumping-mines-info.upgrades_text"}}.style.single_line = false
       el.add{type = "line",  direction = "horizontal"}
-      el.add{type = "label", caption = {"jumping-mines-info.upgrade_range"}}.style.single_line    = false
-      el.add{type = "label", caption = {"jumping-mines-info.upgrade_arm"}}.style.single_line      = false
-      el.add{type = "label", caption = {"jumping-mines-info.upgrade_persistent"}}.style.single_line = false
-      el.add{type = "label", caption = {"jumping-mines-info.upgrade_cooldown"}}.style.single_line  = false
+      el.add{type = "label", caption = {"jumping-mines-info.upgrade_range"}}.style.single_line = false
+      el.add{type = "label", caption = {"jumping-mines-info.upgrade_arm"}}.style.single_line   = false
+      if has_persist then
+        el.add{type = "label", caption = {"jumping-mines-info.upgrade_persistent"}}.style.single_line = false
+        el.add{type = "label", caption = {"jumping-mines-info.upgrade_cooldown"}}.style.single_line   = false
+      end
+
+    elseif page_name == "jm-settings" then
+      el.add{type = "label", caption = {"jumping-mines-info.settings_header"}}.style.single_line = false
+      el.add{type = "line",  direction = "horizontal"}
+      el.add{type = "label", caption = {"jumping-mines-info.settings_persistent"}}.style.single_line = false
+      el.add{type = "label", caption = {"jumping-mines-info.settings_damage"}}.style.single_line     = false
+      el.add{type = "label", caption = {"jumping-mines-info.settings_range"}}.style.single_line      = false
+      el.add{type = "label", caption = {"jumping-mines-info.settings_batch"}}.style.single_line      = false
     end
   end
 
@@ -451,6 +469,7 @@ if script.active_mods["informatron"] then
       return {
         ["jm-mines"]    = 1,
         ["jm-upgrades"] = 1,
+        ["jm-settings"] = 1,
       }
     end,
     informatron_page_content = function(data)

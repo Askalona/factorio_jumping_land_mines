@@ -1,10 +1,27 @@
 -- =============================================================
 --  Jumping Mines — data-final-fixes.lua
 --
---  Two independent sections:
+--  Section 0) Mod settings application
 --    1) Space Exploration mine types (cryo, tritium, antimatter)
---    2) landmine-thrower ammo conversion for all mine variants
+--    2) Damage modifier (applied after all projectiles are defined)
+--    3) landmine-thrower ammo conversion for all mine variants
 -- =============================================================
+
+-- =============================================================
+--  SECTION 0 — Mod settings
+-- =============================================================
+
+-- Hide persistent technology and shortcut if setting is disabled.
+if not settings.startup["jm-enable-persistent"].value then
+  local tech = data.raw["technology"]["jumping-mines-persistent"]
+  if tech then tech.hidden = true end
+  data.raw["shortcut"]["jumping-mines-persistent-toggle"] = nil
+  -- Hide cooldown upgrade techs too — they depend on persistent.
+  for i = 1, 9 do
+    local ct = data.raw["technology"]["jumping-mines-cooldown-" .. i]
+    if ct then ct.hidden = true end
+  end
+end
 
 -- =============================================================
 --  SECTION 1 — Space Exploration integration
@@ -659,9 +676,40 @@ if data.raw["simple-entity"]["se-cryogun-ice"] then
 end -- end SE section
 
 
+-- =============================================================
+--  SECTION 2 — Damage modifier
+-- =============================================================
+-- Applied after all projectiles are defined (vanilla in data.lua,
+-- SE variants above). Skipped when modifier is default (1.0).
+do
+  local mod = settings.startup["jm-damage-modifier"].value
+  if mod ~= 1.0 then
+    local function apply_mod(proj_name)
+      local proj = data.raw["projectile"][proj_name]
+      if not proj or not proj.action then return end
+      for _, act in pairs(proj.action) do
+        local effects = act.action_delivery and act.action_delivery.target_effects
+        if effects then
+          for _, eff in pairs(effects) do
+            if eff.type == "damage" and eff.damage then
+              eff.damage.amount = math.floor(eff.damage.amount * mod)
+            end
+          end
+        end
+      end
+    end
+    apply_mod("jumping-mine-projectile")
+    apply_mod("jumping-flame-projectile")
+    apply_mod("jumping-nuclear-projectile")
+    apply_mod("jumping-cryo-projectile")
+    apply_mod("jumping-tritium-projectile")
+    apply_mod("jumping-antimatter-projectile")
+  end
+end
+
 
 -- =============================================================
---  SECTION 2 — landmine-thrower ammo conversion
+--  SECTION 3 — landmine-thrower ammo conversion
 -- =============================================================
 -- Only run if landmine-thrower's ammo category is present.
 if not data.raw["ammo-category"]["land-mine"] then return end

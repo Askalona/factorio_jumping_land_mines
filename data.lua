@@ -13,12 +13,15 @@ else
 end
 
 -- ─── Shared resistance table for all jumping mines ───────────
+-- "cold" damage type is not available in vanilla — only add if present.
 local mine_resistances = {
-  {type = "fire",      percent = 100},
-  {type = "explosion", percent = 100},
-  {type = "cold",      percent = 100},
-  {type = radiation_type, percent = 100},
+  {type = "fire",          percent = 100},
+  {type = "explosion",     percent = 100},
+  {type = radiation_type,  percent = 100},
 }
+if data.raw["damage-type"]["cold"] then
+  table.insert(mine_resistances, 3, {type = "cold", percent = 100})
+end
 
 -- ─── Visual pieces for mine sprites (128×128 HR art) ──────────
 local function mine_picture_safe(scale, filename)
