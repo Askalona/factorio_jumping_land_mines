@@ -421,32 +421,38 @@ if script.active_mods["informatron"] then
   end
 
   local function page_content(data)
-    local el        = data.element
-    local page_name = data.page_name
-    local has_se    = script.active_mods["space-exploration"]
+    local el          = data.element
+    local page_name   = data.page_name
+    local has_se      = script.active_mods["space-exploration"]
+    local has_persist = settings.startup["jm-enable-persistent"].value
 
     if page_name == "jumping-mines" then
       el.add{type = "label", caption = {"jumping-mines-info.overview_text"}}.style.single_line = false
 
     elseif page_name == "jm-mines" then
-      el.add{type = "label", caption = {"jumping-mines-info.mines_header"}}.style.single_line = false
+      local header = has_persist and "jumping-mines-info.mines_header"
+                                  or "jumping-mines-info.mines_header_no_persistent"
+      el.add{type = "label", caption = {header}}.style.single_line = false
       el.add{type = "line",  direction = "horizontal"}
-      add_mine_row(el, "item/jumping-mine",         {"jumping-mines-info.mine_basic"})
-      add_mine_row(el, "item/jumping-flame-mine",   {"jumping-mines-info.mine_flame"})
-      add_mine_row(el, "item/jumping-nuclear-mine", {"jumping-mines-info.mine_nuclear"})
+      local s = has_persist and "" or "_no_persistent"
+      add_mine_row(el, "item/jumping-mine",         {"jumping-mines-info.mine_basic"          .. s})
+      add_mine_row(el, "item/jumping-flame-mine",   {"jumping-mines-info.mine_flame"          .. s})
+      add_mine_row(el, "item/jumping-nuclear-mine", {"jumping-mines-info.mine_nuclear"        .. s})
       if has_se then
-        add_mine_row(el, "item/jumping-cryo-mine",       {"jumping-mines-info.mine_cryo"})
-        add_mine_row(el, "item/jumping-tritium-mine",    {"jumping-mines-info.mine_tritium"})
-        add_mine_row(el, "item/jumping-antimatter-mine", {"jumping-mines-info.mine_antimatter"})
+        add_mine_row(el, "item/jumping-cryo-mine",       {"jumping-mines-info.mine_cryo"      .. s})
+        add_mine_row(el, "item/jumping-tritium-mine",    {"jumping-mines-info.mine_tritium"   .. s})
+        add_mine_row(el, "item/jumping-antimatter-mine", {"jumping-mines-info.mine_antimatter".. s})
       end
 
     elseif page_name == "jm-upgrades" then
       el.add{type = "label", caption = {"jumping-mines-info.upgrades_text"}}.style.single_line = false
       el.add{type = "line",  direction = "horizontal"}
-      el.add{type = "label", caption = {"jumping-mines-info.upgrade_range"}}.style.single_line      = false
-      el.add{type = "label", caption = {"jumping-mines-info.upgrade_arm"}}.style.single_line        = false
-      el.add{type = "label", caption = {"jumping-mines-info.upgrade_persistent"}}.style.single_line = false
-      el.add{type = "label", caption = {"jumping-mines-info.upgrade_cooldown"}}.style.single_line   = false
+      el.add{type = "label", caption = {"jumping-mines-info.upgrade_range"}}.style.single_line = false
+      el.add{type = "label", caption = {"jumping-mines-info.upgrade_arm"}}.style.single_line   = false
+      if has_persist then
+        el.add{type = "label", caption = {"jumping-mines-info.upgrade_persistent"}}.style.single_line = false
+        el.add{type = "label", caption = {"jumping-mines-info.upgrade_cooldown"}}.style.single_line   = false
+      end
 
     elseif page_name == "jm-settings" then
       el.add{type = "label", caption = {"jumping-mines-info.settings_header"}}.style.single_line = false
