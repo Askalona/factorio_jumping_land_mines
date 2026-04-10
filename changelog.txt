@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2026-04-10
+  Features:
+    - Added mod settings: damage multiplier, starting range, persistent mode toggle, mines-per-tick batch size
+    - Added Informatron page: Mod Settings — describes all available options with current defaults
+    - Persistent Mode can now be disabled in startup settings, completely hiding the technology and shortcut button
+    - Starting detection range (default 5 tiles) is now configurable without code changes
+    - Mines-per-tick batch size (default 100) is now a runtime-global setting, changeable without restart
+  Bugfixes:
+    - Fixed crash on load without Space Exploration or Krastorio2: "cold" damage type resistance is now only added when the damage type exists
+---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2026-04-02
   Changes:
