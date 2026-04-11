@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2026-04-12
+  Bugfixes:
+    - Fixed crash on load: settings.lua was missing from the release zip, causing all mod settings to be unregistered
+---------------------------------------------------------------------------------------------------
 Version: 1.0.4
 Date: 2026-04-10
   Features:

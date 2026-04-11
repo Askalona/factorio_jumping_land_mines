@@ -23,7 +23,7 @@ jobs:
         run: |
           MOD_DIR="${{ steps.info.outputs.name }}_${{ steps.info.outputs.version }}"
           mkdir -p build/$MOD_DIR
-          cp -r changelog.txt control.lua data.lua data-final-fixes.lua info.json thumbnail.png graphics locale build/$MOD_DIR/
+          cp -r changelog.txt control.lua data.lua data-final-fixes.lua settings.lua info.json thumbnail.png graphics locale LICENSE README.md build/$MOD_DIR/
           cd build
           zip -r "../${{ steps.info.outputs.zip }}" "$MOD_DIR"
 
